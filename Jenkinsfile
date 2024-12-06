@@ -12,7 +12,7 @@ pipeline {
     stages {
         stage('pullscm') {
             steps {
-                git credentialsId: 'github', url: 'git@github.com:sathishbob/javaapp-kuber.git'
+                git credentialsId: 'github', url: 'git@github.com:Gupta-Pankhuri/javaapp-kuber.git'
             }
         }
         
@@ -25,7 +25,7 @@ pipeline {
         stage('build docker image') {
             steps {
                 script {
-                    dockerImage = docker.build("sathishbob/javaapp-k8s","kubernetes-java")
+                    dockerImage = docker.build("pankhuri9807/javaapp-k8s","kubernetes-java")
                 }
             }
         }
@@ -43,7 +43,7 @@ pipeline {
         stage ('Kube Deployment') {
             steps {
                 script {
-                    withKubeConfig([credentialsId: 'kube']) {
+                    withKubeConfig([credentialsId: 'kube-config']) {
                         sh "sed -i s/latest/$BUILD_NUMBER/g kubernetes-java/deploy.yml"
                         sh "kubectl apply -f kubernetes-java/deploy.yml"
                         sh "sleep 10 && kubectl get svc"
